@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>SecureNet AI</title>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🛡️ SecureNet AI</h1>
+    <p>AI-Based Network Intrusion Detection & Traffic Analysis</p>
+  </header>
+
+  <section class="cards">
+    <div class="card"><span>Total Flows</span><strong>{{ total }}</strong></div>
+    <div class="card"><span>Normal Traffic</span><strong>{{ benign }}</strong></div>
+    <div class="card"><span>DDoS / Suspicious</span><strong>{{ ddos }}</strong></div>
+  </section>
+
+  <section class="status {{ 'alert' if status == 'ALERT' else 'normal' }}">
+    <strong>System Status: {{ status }}</strong>
+    {% if status == 'NORMAL' %}
+      <p>No suspicious flows in the current test file.</p>
+    {% else %}
+      <p>Suspicious traffic has been classified by the ML model.</p>
+    {% endif %}
+  </section>
+
+<div class="actions">
+    <button id="predictBtn" onclick="runPrediction()">
+        🔄 Run AI Prediction Again
+    </button>
+</div>
+
+<script>
+async function runPrediction() {
+    const button = document.getElementById("predictBtn");
+
+    button.disabled = true;
+    button.innerText = "⏳ Running AI Prediction...";
+
+    try {
+        const response = await fetch("/refresh");
+        const data = await response.json();
+
+        if (data.ok) {
+            window.location.href = "/";
+        } else {
+            alert("Prediction failed: " + data.error);
+            button.disabled = false;
+            button.innerText = "🔄 Run AI Prediction Again";
+        }
+    } catch (error) {
+        alert("Server error: " + error);
+        button.disabled = false;
+        button.innerText = "🔄 Run AI Prediction Again";
+    }
+}
+</script>
+  <section>
+    <h2>Detection Records</h2>
+    <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Time</th><th>Source IP</th><th>Destination IP</th>
+          <th>Src Port</th><th>Dst Port</th><th>Protocol</th>
+          <th>Prediction</th><th>Confidence</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for r in rows %}
+        <tr>
+          <td>{{ r.run_time }}</td><td>{{ r.src_ip }}</td><td>{{ r.dst_ip }}</td>
+          <td>{{ r.src_port }}</td><td>{{ r.dst_port }}</td><td>{{ r.protocol }}</td>
+          <td class="{{ 'bad' if r.prediction == 'DDoS' else 'good' }}">{{ r.prediction }}</td>
+          <td>{{ "%.2f"|format(r.confidence) }}%</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <footer>
+    <p>Prototype • Random Forest • 78 flow-level features</p>
+  </footer>
+</div>
+</body>
+</html>
