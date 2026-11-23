@@ -1,0 +1,14 @@
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6f8;color:#20252b}
+.wrap{max-width:1200px;margin:0 auto;padding:28px}
+header{background:#1f2937;color:white;padding:28px;border-radius:14px}
+header h1{margin:0 0 8px}.cards{display:flex;gap:18px;margin:22px 0}
+.card{background:white;padding:22px;flex:1;border-radius:14px;box-shadow:0 2px 8px #d5d9de}
+.card span{display:block;color:#667085}.card strong{display:block;font-size:34px;margin-top:8px}
+.status{padding:18px;border-radius:12px;background:white;margin-bottom:18px}
+.status.normal{border-left:6px solid #2e7d32}.status.alert{border-left:6px solid #c62828}
+.actions a{display:inline-block;padding:12px 18px;border-radius:8px;background:#1f2937;color:white;text-decoration:none;margin-bottom:20px}
+.table-wrap{overflow:auto;background:white;border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:10px;border-bottom:1px solid #e5e7eb;text-align:left;white-space:nowrap}
+th{background:#eef1f4}.good{font-weight:bold}.bad{font-weight:bold}
+footer{margin-top:24px;color:#667085}
